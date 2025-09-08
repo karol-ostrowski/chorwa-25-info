@@ -35,12 +35,7 @@
       background-size:cover;background-position:center;position:relative;color:var(--white);
     }
     .hero::after{
-      content:'';position:absolute;inset:0;
-      background: linear-gradient(135deg, 
-        rgba(245,143,44,0.3) 0%, 
-        rgba(216,69,55,0.5) 50%, 
-        rgba(255,107,107,0.4) 100%);
-      z-index: 1;
+      display: none;
     }
     .hero-content{position:relative;z-index:2;text-align:center;padding:24px}
     .event-title{font-size:clamp(28px,8vw,48px);font-weight:700;letter-spacing:0.4px;text-shadow:2px 2px 4px rgba(0,0,0,0.3)}
@@ -72,11 +67,12 @@
     .section-inner{width:100%;max-width:960px;position:relative;z-index:2}
     .section-title{font-size:20px;font-weight:700;margin:6px 0 18px;text-shadow:1px 1px 2px rgba(0,0,0,0.2);text-align: center;}
 
-    .bingo-board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;justify-items:center;align-items:center}
+    .bingo-board{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;justify-items:center;align-items:center}
     .bingo-cell {
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -124,7 +120,7 @@
       background-color: var(--orange-dark);
     }
     .map-wrapper{
-      width:100%;max-width:980px;height:600px;border-radius:20px;overflow:hidden;
+      width:100%;max-width:980px;height:450px;border-radius:20px;overflow:hidden;
       box-shadow:0 20px 40px rgba(0,0,0,0.3);
       border:3px solid var(--glass-border);
       position:relative;z-index:2;
@@ -140,7 +136,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.0);
       backdrop-filter: blur(5px);
       z-index: 1;
     }
@@ -210,7 +206,7 @@
   <script>
     const config = {
       eventTitle: 'CHORWA SKŻ PW \'25',
-      coverImage: './welcome.png',
+      coverImage: './welcome.jpg',
       bingoItems: [
         '?','?','Ręcznie lepione pierogi','?',
         '?','Picie rakiji z Chorwatami','?','Ciasto pieczone na jachcie',
