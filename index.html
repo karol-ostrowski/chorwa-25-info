@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chorwa '25 — informacje</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Leaflet (map) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+
+  <style>
+    :root{
+      --orange-light:#f58f2c;
+      --orange-dark:#d84537;
+      --orange-medium:#e87029;
+      --coral:#ff6b6b;
+      --peach:#ffa726;
+      --white:#ffffff;
+      --dark:#121212;
+      --glass: rgba(255, 255, 255, 0.15);
+      --glass-border: rgba(255, 255, 255, 0.2);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Montserrat',system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--dark);background:var(--white)}
+
+    .pages{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch}
+    section{min-height:100vh;scroll-snap-align:start;position:relative;overflow:hidden}
+
+    /* HERO */
+    .hero{
+      display:flex;align-items:center;justify-content:center;
+      background-size:cover;background-position:center;position:relative;color:var(--white);
+    }
+    .hero::after{
+      content:'';position:absolute;inset:0;
+      background: linear-gradient(135deg, 
+        rgba(245,143,44,0.3) 0%, 
+        rgba(216,69,55,0.5) 50%, 
+        rgba(255,107,107,0.4) 100%);
+      z-index: 1;
+    }
+    .hero-content{position:relative;z-index:2;text-align:center;padding:24px}
+    .event-title{font-size:clamp(28px,8vw,48px);font-weight:700;letter-spacing:0.4px;text-shadow:2px 2px 4px rgba(0,0,0,0.3)}
+    .hero-sub{font-size:clamp(14px,3.2vw,18px);opacity:0.95;margin-top:8px;text-shadow:1px 1px 2px rgba(0,0,0,0.3)}
+
+    .down-arrow{
+      position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+      background:var(--glass);backdrop-filter:blur(10px);border:2px solid var(--glass-border);
+      width:50px;height:50px;border-radius:50%;cursor:pointer;z-index:3;
+      transition:all 0.3s ease;animation:bounce 2s infinite;
+    }
+    .down-arrow:hover{background:rgba(255,255,255,0.25);transform:translateX(-50%) translateY(-2px)}
+    .down-arrow svg{width:20px;height:20px}
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+      40% { transform: translateX(-50%) translateY(-10px); }
+      60% { transform: translateX(-50%) translateY(-5px); }
+    }
+
+    .wave{display:block;width:100%;height:80px;line-height:0}
+
+    /* SECTION 1: Bingo */
+    .bingo-section{
+      color:var(--white);display:flex;flex-direction:column;align-items:center;padding:36px 20px;
+      position:relative;
+      background-color: var(--orange-light);
+    }
+    .section-inner{width:100%;max-width:960px;position:relative;z-index:2}
+    .section-title{font-size:20px;font-weight:700;margin:6px 0 18px;text-shadow:1px 1px 2px rgba(0,0,0,0.2);text-align: center;}
+
+    .bingo-board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;justify-items:center;align-items:center}
+    .bingo-cell {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass); /* semi-transparent glass */
+  backdrop-filter: blur(10px); /* glass blur */
+  border: 2px solid var(--glass-border);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* subtle shadow */
+  font-weight: 600;
+  color: var(--white);
+  font-size: 14px;
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: none; /* no hover animation */
+}
+
+.bingo-cell::before {
+  display: none; /* remove any gradient shine overlay */
+}
+
+.bingo-cell:hover {
+  transform: none;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* keep same shadow on hover */
+  border-color: var(--glass-border);
+}
+
+@media(min-width:700px){
+  .bingo-cell {
+    width: 150px;
+    height: 150px;
+    font-size: 15px;
+    border-radius: 25px;
+  }
+}
+    @media(min-width:700px){.bingo-cell{width:150px;height:150px;font-size:15px;border-radius:25px}}
+
+    .bingo-text{margin-top:12px;font-size:15px;line-height:1.5;color:var(--white);text-shadow:1px 1px 2px rgba(0,0,0,0.2)}
+    
+    /* SECTION 2 */
+    .where-section{
+      color:var(--white);display:flex;flex-direction:column;align-items:center;padding:36px 20px;
+      position:relative;
+      background-color: var(--orange-dark);
+    }
+    .map-wrapper{
+      width:100%;max-width:980px;height:600px;border-radius:20px;overflow:hidden;
+      box-shadow:0 20px 40px rgba(0,0,0,0.3);
+      border:3px solid var(--glass-border);
+      position:relative;z-index:2;
+    }
+    @media(min-width:700px){.map-wrapper{height:420px}}
+
+    footer{padding:18px;text-align:center;font-size:13px;color:#eee}
+
+    /* Glassmorphism enhancement */
+    .glass-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pages" id="pages">
+
+    <!-- HERO / COVER -->
+    <section class="hero" id="hero">
+      <div class="level-bg"></div>
+      
+      <div class="hero-content">
+        <h1 class="event-title" id="eventTitle">chorwa</h1>
+        <p class="hero-sub">19.09.2025 - 28.09.2025</p>
+      </div>
+
+      <button class="down-arrow" aria-label="Scroll down" id="downBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14"></path>
+          <path d="M19 12l-7 7-7-7"></path>
+        </svg>
+      </button>
+
+      <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" style="position:absolute;left:0;right:0;bottom:-1px;transform:translateY(1px);z-index:2">
+        <path d="M0,40 C240,80 360,0 720,40 C1080,80 1200,0 1440,40 L1440 80 L0 80 Z" fill="var(--orange-light)"></path>
+      </svg>
+    </section>
+
+    <!-- BINGO SECTION -->
+    <section class="bingo-section" id="bingoSection">
+      <div class="level-bg"></div>
+      <div class="glass-overlay"></div>
+      
+      <div class="section-inner">
+        <h2 class="section-title">Bingo</h2>
+
+        <div class="bingo-board" id="bingoBoard"></div>
+
+        <p class="bingo-text" id="bingoUnder">Każde zadanie należy udokumentować fotograficznie. Po wygraniu bingo zgłosić się do organizatorów.</p>
+      </div>
+
+      <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" style="position:absolute;left:0;right:0;bottom:-1px;transform:translateY(1px);z-index:2">
+        <path d="M0,40 C220,0 420,80 720,40 C1020,0 1220,80 1440,40 L1440 80 L0 80 Z" fill="var(--orange-dark)"></path>
+      </svg>
+    </section>
+
+    <!-- WHERE SECTION -->
+    <section class="where-section" id="whereSection">
+      <div class="level-bg"></div>
+      <div class="glass-overlay"></div>
+      
+      <div class="section-inner">
+        <h2 class="section-title">Dokąd dziś płyniemy</h2>
+
+        <div class="map-wrapper" id="map"></div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <script>
+    const config = {
+      eventTitle: 'CHORWA SKŻ PW \'25',
+      coverImage: './welcome.png',
+      bingoItems: [
+        '?','?','Ręcznie lepione pierogi','?',
+        '?','Picie rakiji z Chorwatami','?','Ciasto pieczone na jachcie',
+        'Winnica','?','?','?',
+        '?','?','?','?'
+      ],
+      mapPin: { lat: 42.655976, lng: 18.086200, label: 'Dubrownik' }
+    };
+
+    document.getElementById('eventTitle').textContent = config.eventTitle;
+    document.getElementById('hero').style.backgroundImage = `url('${config.coverImage}')`;
+
+    const bingoBoardEl = document.getElementById('bingoBoard');
+    function renderBingo(){
+      bingoBoardEl.innerHTML = '';
+      const items = config.bingoItems.slice(0,16);
+      for(let i=0;i<16;i++){
+        const cell = document.createElement('div');
+        cell.className = 'bingo-cell';
+        cell.textContent = items[i] || '?';
+        bingoBoardEl.appendChild(cell);
+      }
+    }
+    renderBingo();
+
+    document.getElementById('downBtn').addEventListener('click', ()=>{
+      const pages = document.getElementById('pages');
+      pages.scrollTo({top: window.innerHeight, behavior: 'smooth'});
+    });
+
+    const map = L.map('map').setView([config.mapPin.lat, config.mapPin.lng], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.marker([config.mapPin.lat, config.mapPin.lng]).addTo(map);
+
+    setTimeout(()=>{map.invalidateSize();},300);
+  </script>
+</body>
+</html>
