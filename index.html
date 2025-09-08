@@ -67,29 +67,33 @@
     .section-inner{width:100%;max-width:960px;position:relative;z-index:2}
     .section-title{font-size:20px;font-weight:700;margin:6px 0 18px;text-shadow:1px 1px 2px rgba(0,0,0,0.2);text-align: center;}
 
-    .bingo-board{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;justify-items:center;align-items:center}
-    .bingo-cell {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  aspect-ratio: 1 / 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--glass); /* semi-transparent glass */
-  backdrop-filter: blur(10px); /* glass blur */
-  border: 2px solid var(--glass-border);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* subtle shadow */
-  font-weight: 600;
-  color: var(--white);
-  font-size: 11px;
-  padding: 8px;
-  text-align: center;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: none; /* no hover animation */
-}
+    .bingo-board {
+    display: grid;
+    grid-template-columns: repeat(4,1fr); /* flexible columns */
+    gap: 6px; /* tighter gap for phones */
+    justify-items: center;
+    align-items: center;
+  }
+
+  .bingo-cell {
+    width: 100%;            /* fill available space in column */
+    max-width: 90px;        /* don’t grow too big */
+    aspect-ratio: 1 / 1;    /* keep circle shape */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--glass-border);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    font-weight: 600;
+    color: var(--white);
+    font-size: 11px;
+    padding: 6px;
+    text-align: center;
+    cursor: pointer;
+  }
 
 .bingo-cell::before {
   display: none; /* remove any gradient shine overlay */
@@ -101,17 +105,7 @@
   border-color: var(--glass-border);
 }
 
-@media(min-width:700px){
-  .bingo-cell {
-    width: 150px;
-    height: 150px;
-    font-size: 15px;
-    border-radius: 25px;
-  }
-}
-    @media(min-width:700px){.bingo-cell{width:150px;height:150px;font-size:15px;border-radius:25px}}
-
-    .bingo-text{margin-top:12px;font-size:15px;line-height:1.5;color:var(--white);text-shadow:1px 1px 2px rgba(0,0,0,0.2)}
+.bingo-text{margin-top:12px;font-size:15px;line-height:1.5;color:var(--white);text-shadow:1px 1px 2px rgba(0,0,0,0.2)}
     
     /* SECTION 2 */
     .where-section{
